@@ -1,10 +1,10 @@
 import './App.css';
-import NavBar from './components/NavBar/NavBar';
+import Router from './containers/Router/Router';
 
 const App = () => {
   return (
     <>
-      <NavBar />
+      <Router />
     </>
   );
 };
