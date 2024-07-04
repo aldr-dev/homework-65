@@ -1,10 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
+import { Editor } from '@tinymce/tinymce-react';
 import {ApiPage, ApiSelectPage} from '../../types';
 import {useNavigate} from 'react-router-dom';
 import axiosApi from '../../axiosApi';
-import './EditPageForm.css';
 import {enqueueSnackbar} from 'notistack';
 import Preloader from '../Preloader/Preloader';
+import './EditPageForm.css';
 
 const EditPageForm = () => {
   const [data, setData] = useState<ApiPage>({
@@ -53,25 +54,29 @@ const EditPageForm = () => {
   }, [fetchData]);
 
 
-  const onFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const {name, value} = event.target;
-    setData((prevState) => {
-      return {
+  const onFieldChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+
+    if (event.target instanceof HTMLSelectElement) {
+      setSelectPage((prevState) => ({
         ...prevState,
         [name]: value,
-      };
-    });
+      }));
+    } else {
+      setData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
-  const onChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const {name, value} = event.target;
-    setSelectPage((prevState) => {
-      return {
-        ...prevState,
-        [name]: value,
-      };
-    });
+  const onEditorChange = (value: string) => {
+    setData((prevState) => ({
+      ...prevState,
+      content: value,
+    }));
   };
+
 
   const onFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -97,6 +102,7 @@ const EditPageForm = () => {
     navigate(`/pages/${selectPage.page}`);
   };
 
+
   return (
     <>
       <Preloader preloader={fetchDataLoader} />
@@ -105,7 +111,7 @@ const EditPageForm = () => {
         <form onSubmit={onFormSubmit} className="form">
           <label htmlFor="selectPage">Select edit page:</label>
           <select
-            onChange={onChangeSelect}
+            onChange={onFieldChange}
             id="selectPage"
             value={selectPage.page}
             className="form-select"
@@ -131,15 +137,17 @@ const EditPageForm = () => {
             required
           />
           <label htmlFor="content">Content:</label>
-          <textarea
-            onChange={onFieldChange}
+          <Editor
+            apiKey="2z6i5pjfcl1jmm6igm39fe37qplzsyllmsmk9q8r2vakdig1"
+            onEditorChange={onEditorChange}
             id="content"
             value={data.content}
-            className="form-description"
             name="content"
-            placeholder="Enter content description"
-            required>
-          </textarea>
+            required
+            init={{
+              placeholder: 'Enter content description',
+            }}
+          />
           <button className="form-btn" disabled={putDataLoader} type="submit">
             <div className={putDataLoader ? 'spinner' : ''}>
               {putDataLoader ? '' : 'Save'}

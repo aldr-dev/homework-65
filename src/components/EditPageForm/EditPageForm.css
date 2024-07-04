@@ -12,11 +12,16 @@
 .form-input, .form-select {
   margin: 5px 0 15px 0;
   height: 35px;
+  border-radius: 10px;
+  border: 2px solid #eee;
 }
 
-.form-description {
+.tox.tox-tinymce {
   margin: 5px 0 15px 0;
-  height: 100px;
+}
+
+.tox.tox-tinymce:focus {
+  outline-color: #2c5898;
 }
 
 .form-btn {

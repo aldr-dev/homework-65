@@ -50,7 +50,7 @@ const Page = () => {
       {content && (
         <>
           <h3 className="page-title">{content.title}</h3>
-          <p className="page-content">{content.content}</p>
+          <div className="page-content" dangerouslySetInnerHTML={{__html: content.content}}></div>
         </>
       )}
     </>
