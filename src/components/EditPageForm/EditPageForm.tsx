@@ -77,7 +77,6 @@ const EditPageForm = () => {
     }));
   };
 
-
   const onFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -85,7 +84,7 @@ const EditPageForm = () => {
       try {
         if (selectPage.page.length !== 0) {
           setPutDataLoader(true);
-          const response = await axiosApi.put(`/pages/${selectPage.page}.json`, data);
+          const response = await axiosApi.put<ApiPage>(`/pages/${selectPage.page}.json`, data);
           setPutDataLoader(false);
 
           if (response.status !== 200) {
